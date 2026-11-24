@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "427408783867",
+    "project_id": "sanchore-bazaar",
+    "storage_bucket": "sanchore-bazaar.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427408783867:android:cb9b51b1f9ae4183baf35e",
+        "android_client_info": {
+          "package_name": "com.sanchorebazaar.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCtsKjTt1EH9KHNkOhNoRpTHwjFY_uTMCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

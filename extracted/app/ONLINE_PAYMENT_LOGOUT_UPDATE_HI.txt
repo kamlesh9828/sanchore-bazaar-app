@@ -1,0 +1,16 @@
+SANCHORE BAZAAR - UPDATE NOTES
+
+1. Customer login ke baad Home screen par Logout button ab sahi kaam karega.
+   - Firebase se sign out karega.
+   - Login screen kholega.
+   - Purani customer screens ko navigation history se hata dega.
+
+2. Checkout mein Cash on Delivery aur Online Payment alag choices hain.
+   Online Payment par secure Paytm checkout khulta hai. Paytm merchant account par
+   jo methods enabled hain (UPI Apps, Cards, Net Banking etc.), wahi gateway page
+   par customer ko milenge. App khud se Google Pay/PhonePe ko direct gateway nahi
+   bana sakti; gateway account ki configuration zaroori hai.
+
+3. Important: Paytm live merchant credentials aur activation ke bina real online
+   payment chalne ka daava nahi kiya gaya hai. Flutter APK build is environment mein
+   run nahi hua; FlutLab mein pub get aur build zaroor karein.

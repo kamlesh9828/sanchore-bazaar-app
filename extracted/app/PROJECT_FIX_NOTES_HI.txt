@@ -1,0 +1,44 @@
+SANCHORE BAZAAR – UPDATED PROJECT
+
+इस ZIP में Flutter ऐप, Cloudflare Worker, Firestore Rules और Cron Trigger config शामिल हैं।
+
+INSTALL / DEPLOY क्रम:
+1. FlutLab में पूरा ZIP import करें या इसी ZIP की सभी फाइलें अपने मौजूदा प्रोजेक्ट में replace करें।
+2. FlutLab में `flutter pub get` चलाएँ। इस अपडेट में `webview_flutter` जोड़ा गया है।
+3. Firebase Console > Firestore Database > Rules में `firestore.rules` का पूरा कोड Publish करें।
+4. Cloudflare Dashboard > Workers & Pages > अपना Sanchore Bazaar Worker खोलें। `cloudflare-worker/worker.js` का पूरा कोड paste करके Deploy करें।
+5. Cloudflare Worker > Settings > Variables and Secrets में ये सेट करें:
+   - FIREBASE_PROJECT_ID (पहले से हो तो वही रखें)
+   - FIREBASE_WEB_API_KEY (पहले से हो तो वही रखें)
+   - FIREBASE_SERVICE_ACCOUNT_JSON (Secret, पहले वाला ही रखें)
+   - PAYTM_MID (Paytm MID)
+   - PAYTM_MERCHANT_KEY (Secret – इसे किसी चैट में न भेजें)
+   - PAYTM_ENV = STAGING (पहले टेस्ट के लिए)
+   - PAYTM_WEBSITE_NAME = WEBSTAGING (Staging के लिए)
+   - WORKER_PUBLIC_URL = https://sanchore-bazaar-api.kamlesh9828-kp.workers.dev
+6. Cloudflare Worker > Settings > Triggers > Cron Triggers में `* * * * *` जोड़ें। `cloudflare-worker/wrangler.toml` में यही Cron लिखा है। यह Delivery Offer timeout और पुराने अधूरे Paytm sessions की जाँच करता है।
+7. Paytm Staging पर टेस्ट payment सफल होने के बाद ही Production credentials लगाएँ:
+   - PAYTM_ENV = PRODUCTION
+   - PAYTM_WEBSITE_NAME = DEFAULT
+   - PAYTM_MID और PAYTM_MERCHANT_KEY को Production वाले से बदलें।
+8. Android/iOS पर Google Maps API Key इस प्रोजेक्ट में configured नहीं है; Checkout में GPS या Manual Latitude/Longitude इस्तेमाल करें।
+
+इस अपडेट में किए गए बदलाव:
+- COD और Paytm Online Payment selection Checkout में।
+- COD को Admin setting से ON/OFF करने का नियंत्रण बरकरार।
+- Paytm Initiate Transaction, secure AES/SHA checksum, Transaction Status API verification। App/Client callback से सीधे Paid mark नहीं होता।
+- Paytm payment 30 मिनट तक pending रहने पर Cron उसे expired करता है और reserved product stock वापस करता है।
+- Checkout address के साथ latitude/longitude भेजता है। Worker active service_areas के radius से server-side जाँच करता है।
+- Delivery staff GO ONLINE पर GPS location save करता है; 2 मिनट heartbeat location ताज़ा करता है।
+- Shopkeeper order Accept करते समय App Delivery या External Delivery चुनता है।
+- App Delivery में nearest fresh/available delivery worker को 60-second offer। Reject/timeout पर अगला worker Cron के अगले tick पर खोजा जाता है।
+- Delivery Panel में Accept/Reject Offer, Pickup, Delivered और GPS tracking।
+- External Delivery में कोई delivery staff account नहीं बनाना पड़ता; shopkeeper READY के बाद External Delivered कर सकता है।
+- Firestore Rules में targeted delivery offer और customer payment session read access।
+- AdMob के मौजूदा वास्तविक IDs प्रोजेक्ट में वैसे ही रखे गए हैं; test IDs नहीं लगाए गए।
+
+IMPORTANT LIMITS:
+- Cron Trigger Cloudflare Dashboard में enable करना जरूरी है; केवल Worker code paste करने से Cron अपने-आप activate नहीं होगा। 60-second timeout को अगली minute Cron execution पर process किया जाता है, इसलिए वास्तविक response समय 60–120 सेकंड हो सकता है।
+- Paytm JS Checkout को test MID/Key से staging पर जाँचें। UPI Intent in-app WebView पर अतिरिक्त Android/iOS integration माँग सकता है; Paytm docs में यह अलग से बताया गया है।
+- Flutter/Dart SDK इस environment में उपलब्ध नहीं था, इसलिए `flutter analyze` और Android APK build यहाँ नहीं चला सका। Worker JavaScript Syntax Check पास हुआ।
+- Paytm Merchant Key केवल Cloudflare Secret में रखें, Flutter app या Firestore में नहीं।

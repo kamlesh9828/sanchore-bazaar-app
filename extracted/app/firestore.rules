@@ -1,0 +1,153 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function userDoc() { return get(/databases/$(database)/documents/users/$(request.auth.uid)); }
+    function admin() { return signedIn() && userDoc().data.role == 'admin' && userDoc().data.approved == true && userDoc().data.active != false; }
+    function approvedStaff(roleName) { return signedIn() && userDoc().data.role == roleName && userDoc().data.approved == true && userDoc().data.active != false; }
+
+    match /reward_transactions/{transactionId} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow create, update, delete: if false; // Reward credits are written only by verified AdMob SSV Worker callbacks.
+    }
+    match /reward_sessions/{sessionId} {
+      allow read, write: if false; // One-use reward sessions are Worker-only.
+    }
+
+    match /users/{userId} {
+      allow read: if signedIn() && (request.auth.uid == userId || admin());
+      allow create: if false; // Registration profiles are created only by Worker after email OTP verification.
+      allow update: if admin() || (signedIn() && request.auth.uid == userId
+        && request.resource.data.role == resource.data.role
+        && request.resource.data.approved == resource.data.approved
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','phone','email','photoUrl','updatedAt','defaultAddress','profileUpdatedAt']));
+      allow delete: if admin();
+      match /addresses/{addressId} {
+        allow read, create, update, delete: if signedIn() && request.auth.uid == userId;
+      }
+      match /favorites/{favoriteId} {
+        allow read, create, update, delete: if signedIn() && request.auth.uid == userId;
+      }
+    }
+
+    match /shop_requests/{requestId} {
+      allow read: if admin() || (signedIn() && resource.data.ownerId == request.auth.uid);
+      allow create, update, delete: if false; // Requests and approvals are Worker-only.
+    }
+    match /shops/{shopId} {
+      allow read: if (resource.data.approved == true && resource.data.active == true) || admin() || (signedIn() && resource.data.ownerId == request.auth.uid);
+      allow create, update, delete: if false; // All shop mutations use authenticated Worker endpoints.
+    }
+    match /products/{productId} {
+      allow read: if resource.data.active == true || admin() || (signedIn() && resource.data.ownerId == request.auth.uid);
+      allow create, update, delete: if false;
+    }
+    match /orders/{orderId} {
+      allow read: if signedIn() && (admin() || resource.data.customerId == request.auth.uid || resource.data.shopkeeperId == request.auth.uid || resource.data.deliveryBoyId == request.auth.uid || resource.data.deliveryOfferTo == request.auth.uid);
+      allow create, update, delete: if false; // Order/status/stock/financial changes are Worker-only.
+    }
+    match /settings/{settingId} { allow read: if signedIn(); allow write: if false; }
+    match /payment_sessions/{sessionId} { allow read: if signedIn() && (admin() || resource.data.customerId == request.auth.uid); allow write: if false; }
+    match /shopkeeper_subscriptions/{subscriptionId} { allow read: if signedIn() && (admin() || resource.data.ownerId == request.auth.uid); allow write: if false; }
+    match /service_areas/{areaId} { allow read: if signedIn(); allow write: if admin(); }
+    match /promotions/{id} { allow read: if signedIn(); allow write: if admin(); }
+    match /coupons/{id} { allow read: if signedIn(); allow write: if admin(); }
+    match /offers/{id} { allow read: if signedIn(); allow write: if admin(); }
+
+    match /complaints/{id} {
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if admin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if admin();
+    }
+    match /support_tickets/{id} {
+      allow create: if signedIn() && request.resource.data.userId == request.auth.uid;
+      allow read: if admin() || (signedIn() && resource.data.userId == request.auth.uid);
+      allow update, delete: if admin();
+    }
+    match /cancellationRequests/{id} {
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid
+        && request.resource.data.status == 'pending' && request.resource.data.orderId is string
+        && exists(/databases/$(database)/documents/orders/$(request.resource.data.orderId))
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.customerId == request.auth.uid
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.status in ['placed','accepted'];
+      allow read: if admin() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow update, delete: if false; // Admin review runs through Worker.
+    }
+    match /refundRequests/{id} {
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid
+        && request.resource.data.status == 'pending' && request.resource.data.orderId is string
+        && exists(/databases/$(database)/documents/orders/$(request.resource.data.orderId))
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.customerId == request.auth.uid
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.status == 'delivered'
+        && get(/databases/$(database)/documents/orders/$(request.resource.data.orderId)).data.paymentStatus == 'paid';
+      allow read: if admin() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow update, delete: if false; // Admin review runs through Worker.
+    }
+    match /refund_obligations/{id} { allow read: if admin(); allow write: if false; }
+    match /reviews/{id} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid
+        && request.resource.data.orderId == id && request.resource.data.rating is number
+        && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
+        && exists(/databases/$(database)/documents/orders/$(id))
+        && get(/databases/$(database)/documents/orders/$(id)).data.customerId == request.auth.uid
+        && get(/databases/$(database)/documents/orders/$(id)).data.shopId == request.resource.data.shopId
+        && get(/databases/$(database)/documents/orders/$(id)).data.status == 'delivered';
+      allow update: if false; allow delete: if admin();
+    }
+    match /carts/{userId}/items/{productId} { allow read, create, update, delete: if signedIn() && request.auth.uid == userId; }
+    match /purchases/{id} {
+      allow read: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid);
+      allow write: if false; // Purchases and stock increment are atomic in Worker.
+    }
+    match /expenses/{id} {
+      allow read: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid);
+      allow create: if approvedStaff('shopkeeper') && request.resource.data.shopkeeperId == request.auth.uid && request.resource.data.amount is number && request.resource.data.amount > 0;
+      allow update, delete: if admin();
+    }
+    match /customer_credit/{id} {
+      allow read: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid);
+      allow create: if approvedStaff('shopkeeper') && request.resource.data.shopkeeperId == request.auth.uid && request.resource.data.amount is number && request.resource.data.amount > 0;
+      allow update, delete: if admin();
+    }
+    match /customer_credit_payments/{id} {
+      allow read: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid);
+      allow create: if approvedStaff('shopkeeper') && request.resource.data.shopkeeperId == request.auth.uid
+        && request.resource.data.amount is number && request.resource.data.amount > 0
+        && exists(/databases/$(database)/documents/customer_credit/$(request.resource.data.creditId))
+        && get(/databases/$(database)/documents/customer_credit/$(request.resource.data.creditId)).data.shopkeeperId == request.auth.uid;
+      allow update, delete: if admin();
+    }
+    match /suppliers/{id} {
+      allow read: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid);
+      allow create: if approvedStaff('shopkeeper') && request.resource.data.shopkeeperId == request.auth.uid;
+      allow update, delete: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid && request.resource.data.shopkeeperId == resource.data.shopkeeperId);
+    }
+    match /supplier_transactions/{id} {
+      allow read: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid);
+      allow create: if approvedStaff('shopkeeper') && request.resource.data.shopkeeperId == request.auth.uid && request.resource.data.amount is number && request.resource.data.amount > 0;
+      allow update, delete: if admin();
+    }
+    match /delivery_earnings/{id} {
+      allow read: if admin() || (approvedStaff('delivery') && resource.data.deliveryBoyId == request.auth.uid);
+      allow write: if false;
+    }
+    match /shopkeeper_settlements/{id} {
+      allow read: if admin() || (approvedStaff('shopkeeper') && resource.data.shopkeeperId == request.auth.uid);
+      allow write: if false;
+    }
+    match /platform_ledger/{id} { allow read: if admin(); allow write: if false; }
+    match /notifications/{id} {
+      allow read: if signedIn() && resource.data.userId == request.auth.uid;
+      allow update: if signedIn() && resource.data.userId == request.auth.uid && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read','readAt']);
+      allow create, delete: if admin();
+    }
+    match /ad_settings/{settingId} { allow read, create, update, delete: if admin(); }
+    match /ad_campaigns/{campaignId} {
+      allow read: if admin() || (signedIn() && resource.data.ownerId == request.auth.uid) || (signedIn() && resource.data.status == 'active');
+      allow create, update, delete: if false;
+    }
+    match /ad_events/{eventId} { allow read, create, update, delete: if false; }
+    match /{path=**} { allow read, write: if false; }
+  }
+}

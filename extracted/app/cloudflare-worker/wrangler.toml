@@ -1,0 +1,9 @@
+name = "sanchore-bazaar-api"
+main = "worker.js"
+compatibility_date = "2026-11-18"
+
+[triggers]
+crons = ["* * * * *"]
+
+[ai]
+binding = "AI"

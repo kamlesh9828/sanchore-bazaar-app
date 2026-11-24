@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#124b35">
+<meta name="description" content="Shop live local products from Sanchore Bazaar, powered by Firebase.">
+<link rel="canonical" href="https://sanchorebazaar.bg5.net/">
+<title>Sanchore Bazaar | Shop Local in Sanchore</title>
+<style>
+:root{--green:#124b35;--green2:#1b704c;--mint:#e9f5ed;--orange:#f4a928;--ink:#17251d;--muted:#68776e;--line:#e4ebe6;--bg:#f7f9f7;--white:#fff;--shadow:0 12px 34px rgba(20,55,35,.09)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif}button,input,select{font:inherit}button,a{cursor:pointer}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 32px));margin:auto}
+.topline{background:#0d3928;color:#e9f5ed;font-size:12px;padding:7px 0}.topline .wrap{display:flex;justify-content:space-between;gap:12px}
+header{background:#fff;position:sticky;top:0;z-index:20;border-bottom:1px solid var(--line)}.head{height:76px;display:flex;align-items:center;gap:22px}.brand{display:flex;align-items:center;gap:10px;font-weight:900;color:var(--green);font-size:21px;white-space:nowrap}.logo{width:42px;height:42px;border-radius:13px;background:var(--green);color:white;display:grid;place-items:center;font-size:23px}.search{flex:1;display:flex;background:#f4f7f4;border:1px solid var(--line);border-radius:12px;padding:4px 7px 4px 14px;gap:8px}.search input{border:0;outline:0;background:transparent;width:100%;min-width:0}.search button,.btn{border:0;border-radius:10px;padding:10px 16px;background:var(--green);color:#fff;font-weight:750}.head-actions{display:flex;align-items:center;gap:9px}.softbtn{border:1px solid var(--line);background:#fff;color:var(--green);border-radius:10px;padding:9px 12px;font-weight:700}.mobile-menu{display:none}
+.hero{padding:34px 0 20px}.hero-box{background:linear-gradient(115deg,#e5f3e9 0%,#fff3d9 100%);border-radius:24px;min-height:275px;padding:36px;display:grid;grid-template-columns:1.25fr .75fr;align-items:center;overflow:hidden}.eyebrow{display:inline-block;border:1px solid #c9dfce;color:var(--green);background:#fff9;padding:6px 11px;border-radius:30px;font-size:12px;font-weight:800}.hero h1{font-size:clamp(30px,4.2vw,48px);line-height:1.08;max-width:620px;margin:15px 0 12px;color:#123d2d}.hero p{color:#596b60;max-width:560px;margin:0}.hero-art{font-size:112px;text-align:center;filter:drop-shadow(0 14px 12px #567a4a22)}.hero-cta{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap}.outline{background:#fff;color:var(--green);border:1px solid #cbded0}
+.ad-slot{margin:18px auto;background:#fff;border:1px dashed #c6d3c9;border-radius:14px;min-height:76px;display:flex;align-items:center;justify-content:center;text-align:center;color:#819087;font-size:12px;padding:12px}.ad-slot strong{display:block;color:#63766a;font-size:13px}
+section{padding:22px 0}.section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:15px}.section-head h2{font-size:23px;margin:0;color:#183b2b}.muted{color:var(--muted)}.categories{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}.cat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px 10px;text-align:center;transition:.2s}.cat:hover,.product:hover{transform:translateY(-3px);box-shadow:var(--shadow)}.cat .emoji{font-size:30px;display:block;margin-bottom:6px}.cat b{font-size:13px}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.product{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.2s;position:relative}.product-img{height:155px;display:grid;place-items:center;background:linear-gradient(140deg,#f0f6f1,#fff7e8);font-size:64px}.product-body{padding:13px}.product h3{font-size:15px;margin:0 0 4px}.price{font-weight:850;color:var(--green);font-size:17px}.old{font-size:12px;color:#9aa59e;text-decoration:line-through;margin-left:5px}.product-actions{display:flex;gap:7px;margin-top:10px}.product-actions button{flex:1}.wish{position:absolute;right:10px;top:10px;border:0;background:#fff;border-radius:50%;width:34px;height:34px;font-size:18px;box-shadow:0 3px 12px #0001}.benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.benefit{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px}.benefit strong{display:block;color:var(--green);margin:6px 0}
+footer{margin-top:34px;background:#102f22;color:#e8f3eb;padding:34px 0 20px}.footgrid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px}.footgrid a{display:block;color:#d4e3d8;margin:7px 0;font-size:13px}.footgrid p{color:#c2d4c8;font-size:13px}.copyright{border-top:1px solid #ffffff20;margin-top:22px;padding-top:15px;color:#b8cbbd;font-size:12px}
+.modal{position:fixed;inset:0;background:#0c2018a8;display:none;align-items:center;justify-content:center;padding:18px;z-index:50}.modal.show{display:flex}.panel{background:#fff;border-radius:20px;width:min(440px,100%);padding:24px;box-shadow:0 24px 70px #0003;position:relative;max-height:92vh;overflow:auto}.close{position:absolute;right:15px;top:12px;border:0;background:#f0f4f0;border-radius:50%;width:34px;height:34px;font-size:19px}.panel h2{margin:0 36px 6px 0;color:var(--green)}.panel p{color:var(--muted);font-size:13px}.field{margin:12px 0}.field label{display:block;font-size:12px;font-weight:750;margin-bottom:5px}.field input{width:100%;border:1px solid #d9e3dc;border-radius:10px;padding:12px;outline-color:var(--green)}.full{width:100%;margin-top:8px}.switch{font-size:13px;text-align:center;margin-top:14px}.switch a{color:var(--green);font-weight:800}.notice{background:#edf7ef;color:#235d3c;border-radius:10px;padding:11px;font-size:13px;margin:12px 0;display:none}.notice.show{display:block}.drawer{position:fixed;right:0;top:0;height:100%;width:min(420px,100%);background:#fff;z-index:60;box-shadow:-15px 0 40px #0002;padding:22px;transform:translateX(105%);transition:.25s;overflow:auto}.drawer.show{transform:translateX(0)}.drawer-head{display:flex;justify-content:space-between;align-items:center}.cart-row{display:flex;gap:12px;border-bottom:1px solid var(--line);padding:13px 0}.cart-row .pic{font-size:32px}.cart-row .grow{flex:1}.qty{display:flex;align-items:center;gap:9px;margin-top:5px}.qty button{border:1px solid var(--line);background:#f7faf7;border-radius:7px;padding:2px 9px}.empty{text-align:center;padding:35px 10px;color:var(--muted)}
+.hidden{display:none!important}
+@media(max-width:850px){.categories{grid-template-columns:repeat(3,1fr)}.products{grid-template-columns:repeat(2,1fr)}.head{gap:10px}.head-actions .softbtn span{display:none}.hero-box{grid-template-columns:1fr .5fr;padding:26px}.hero-art{font-size:78px}}
+@media(max-width:600px){.topline .wrap span:last-child{display:none}.head{height:auto;min-height:68px;flex-wrap:wrap;padding:10px 0}.brand{font-size:18px}.logo{width:36px;height:36px}.search{order:3;flex-basis:100%;height:42px}.head-actions{margin-left:auto}.head-actions .softbtn{padding:8px}.hero{padding-top:18px}.hero-box{grid-template-columns:1fr;padding:24px;min-height:0}.hero-art{display:none}.hero h1{font-size:32px}.categories{grid-template-columns:repeat(3,1fr);gap:8px}.cat{padding:12px 5px}.products{gap:10px}.product-img{height:125px;font-size:52px}.product-body{padding:10px}.product-actions{flex-direction:column}.benefits{grid-template-columns:1fr}.footgrid{grid-template-columns:1fr 1fr}.footgrid>div:first-child{grid-column:1/-1}}
+</style>
+</head>
+<body>
+<div class="topline"><div class="wrap"><span>Welcome to Sanchore Bazaar — your local online shopping destination</span><span>Customer support: +91 98288 34349</span></div></div>
+<header><div class="wrap head">
+<a class="brand" href="#"><span class="logo">🛍️</span><span>SANCHORE BAZAAR</span></a>
+<form class="search" id="searchForm"><input id="searchInput" placeholder="Search products, categories..." aria-label="Search products"><button type="submit">Search</button></form>
+<div class="head-actions"><button class="softbtn" id="accountBtn">👤 <span>Account</span></button><button class="softbtn" id="wishlistBtn">♡ <span>Wishlist</span></button><button class="softbtn" id="cartBtn">🛒 <span>Cart</span> (<b id="cartCount">0</b>)</button></div>
+</div></header>
+<main class="wrap">
+<div class="hero"><div class="hero-box"><div><span class="eyebrow">YOUR LOCAL MARKETPLACE</span><h1>Shop local. Find what you need.</h1><p>Discover everyday essentials, groceries, fashion, electronics and more — all in one convenient place in Sanchore.</p><div class="hero-cta"><a class="btn" href="#products">Explore Products</a><button class="btn outline" id="heroAccount">Create Customer Account</button></div></div><div class="hero-art" aria-hidden="true">🛍️🥬📦</div></div></div>
+<div class="ad-slot" id="topAd"><div><strong>Advertisement</strong>Ad space — connect your approved ad network here</div></div>
+<section><div class="section-head"><h2>Shop by Category</h2><span class="muted">Explore popular categories</span></div><div class="categories" id="categories">
+<button class="cat" data-cat="Grocery"><span class="emoji">🥦</span><b>Grocery</b></button><button class="cat" data-cat="Fashion"><span class="emoji">👕</span><b>Fashion</b></button><button class="cat" data-cat="Electronics"><span class="emoji">📱</span><b>Electronics</b></button><button class="cat" data-cat="Home"><span class="emoji">🏠</span><b>Home & Kitchen</b></button><button class="cat" data-cat="Beauty"><span class="emoji">🧴</span><b>Beauty</b></button><button class="cat" data-cat="Other"><span class="emoji">🎁</span><b>More</b></button>
+</div></section>
+<section id="products"><div class="section-head"><h2>Popular Products</h2><span class="muted" id="resultCount">Sample products</span></div><div class="products" id="productGrid"></div></section>
+<div class="ad-slot"><div><strong>Advertisement</strong>Ad space — ads should be clearly labelled and must not block shopping</div></div>
+<section><div class="section-head"><h2>Shopping made simple</h2></div><div class="benefits"><div class="benefit">🚚<strong>Convenient local shopping</strong><span class="muted">Explore products available for customers in and around Sanchore.</span></div><div class="benefit">🔒<strong>Customer account</strong><span class="muted">Register with email verification and manage your orders securely.</span></div><div class="benefit">🎁<strong>Rewards</strong><span class="muted">Eligible rewards can be added after the rewarded advertisement is completed and verified.</span></div></div></section>
+</main>
+<footer><div class="wrap"><div class="footgrid"><div><strong style="font-size:20px">🛍️ Sanchore Bazaar</strong><p>Your local online shopping destination in Sanchore, Rajasthan, India.</p><p>Customer support: <a href="tel:+919828834349">+91 98288 34349</a></p></div><div><strong>Customer Help</strong><a href="#products">Shop Products</a><a href="#" id="footerAccount">My Account</a><a href="#" id="footerOrders">My Orders</a><a href="mailto:support@sanchorebazaar.bg5.net">Contact Us</a></div><div><strong>Information</strong><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms & Conditions</a><a href="refund.html">Refund & Cancellation</a><a href="shipping.html">Shipping & Delivery</a></div></div><div class="copyright">© 2026 Sanchore Bazaar. All rights reserved.</div></div></footer>
+
+<div class="modal" id="authModal"><div class="panel"><button class="close" id="closeAuth">×</button><h2 id="authTitle">Customer Login</h2><p id="authSub">Login to continue shopping.</p><div class="notice" id="authNotice"></div>
+<form id="authForm">
+<div class="field hidden" id="nameField"><label for="fullName">Full name</label><input id="fullName" autocomplete="name" placeholder="Enter your name"></div>
+<div class="field hidden" id="phoneField"><label for="mobile">Mobile number (no OTP)</label><input id="mobile" inputmode="tel" autocomplete="tel" placeholder="10-digit mobile number"></div>
+<div class="field"><label for="email">Email address</label><input id="email" type="email" required autocomplete="email" placeholder="you@example.com"></div>
+<div class="field"><label for="password">Password</label><input id="password" type="password" required minlength="8" autocomplete="current-password" placeholder="At least 8 characters"></div>
+<div class="field hidden" id="confirmField"><label for="confirmPassword">Confirm password</label><input id="confirmPassword" type="password" minlength="8" placeholder="Re-enter password"></div>
+<button class="btn full" id="authSubmit" type="submit">Login</button></form>
+<div class="switch" style="display:grid;gap:8px;margin-top:12px"><button class="softbtn" id="googleLogin" type="button">Google से जारी रखें</button><button class="softbtn" id="appleLogin" type="button">Apple से जारी रखें</button></div>
+<div class="switch" id="authSwitch">New customer? <a href="#" id="showSignup">Create account</a></div><div class="switch" id="forgotLine"><a href="#" id="forgotBtn">Forgot password?</a></div>
+</div></div>
+<aside class="drawer" id="cartDrawer"><div class="drawer-head"><h2>Your Cart</h2><button class="softbtn" id="closeCart">Close</button></div><div id="cartItems"></div><div id="cartFooter"></div></aside>
+<aside class="drawer" id="wishlistDrawer"><div class="drawer-head"><h2>Your Wishlist</h2><button class="softbtn" id="closeWishlist">Close</button></div><div id="wishlistItems"></div></aside>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+// Sanchore Bazaar website: same Firebase project and Firestore collections as Android app.
+const firebaseConfig = {
+  apiKey: "AIzaSyAZEBjbfX2E4PGWY6SJKM6uIwRZe8b3os",
+  authDomain: "sanchore-bazaar.firebaseapp.com",
+  projectId: "sanchore-bazaar",
+  storageBucket: "sanchore-bazaar.firebasestorage.app",
+  messagingSenderId: "427408783867",
+  appId: "1:427408783867:web:f3d1ad4f2138573bbaf35e"
+};
+const WORKER_BASE = "https://sanchore-bazaar-api.kamlesh9828-kp.workers.dev";
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+const products = [];
+let cart=JSON.parse(localStorage.getItem("sb_cart")||"[]"), wishlist=JSON.parse(localStorage.getItem("sb_wishlist")||"[]"), mode="login", activeCategory="All";
+const $=id=>document.getElementById(id), money=n=>"₹"+Number(n||0).toLocaleString("en-IN");
+function save(){localStorage.setItem("sb_cart",JSON.stringify(cart));localStorage.setItem("sb_wishlist",JSON.stringify(wishlist));$("cartCount").textContent=cart.reduce((s,x)=>s+x.qty,0)}
+function productEmoji(p){return p.productEmoji || ({Grocery:"🥬",Fashion:"👕",Electronics:"📱",Home:"🏠",Beauty:"🧴"}[p.category] || "🛍️")}
+function renderProducts(query=""){
+ let list=products.filter(p=>(activeCategory==="All"||String(p.category||"").toLowerCase()===activeCategory.toLowerCase())&&(`${p.name||""} ${p.category||""}`.toLowerCase().includes(query.toLowerCase())));
+ $("resultCount").textContent=list.length+" products from Sanchore Bazaar shops";
+ $("productGrid").innerHTML=list.map(p=>{const id=p.id,stock=Number(p.stock||0),image=p.imageVerified===true&&String(p.imageUrl||"").startsWith("https://")?`<img src="${p.imageUrl}" alt="" style="width:100%;height:100%;object-fit:cover">`:productEmoji(p);return `<article class="product"><button class="wish" data-wish="${id}" aria-label="Add to wishlist">${wishlist.includes(id)?"♥":"♡"}</button><div class="product-img">${image}</div><div class="product-body"><div class="muted" style="font-size:11px">${p.category||"Local product"}</div><h3>${p.name||"Product"}</h3><div class="price">${money(p.price)} <small style="font-size:11px;color:#68776e">/ ${p.unit||"नग"}</small></div><div class="muted" style="font-size:11px">${stock>0?`Available: ${stock}`:"Out of stock"}</div><div class="product-actions"><button class="btn" data-add="${id}" ${stock<1?"disabled":""}>Add to Cart</button><button class="softbtn" data-buy="${id}" ${stock<1?"disabled":""}>Buy</button></div></div></article>`}).join("")||'<p class="muted">अभी इस श्रेणी में कोई उपलब्ध प्रोडक्ट नहीं है।</p>';
+}
+async function loadProducts(){
+ $("resultCount").textContent="Loading live products…";
+ try {const snap=await db.collection("products").where("active","==",true).get();products.splice(0,products.length,...snap.docs.map(d=>({id:d.id,...d.data()})).filter(p=>Number(p.stock||0)>0));renderProducts($("searchInput").value);}
+ catch(e){$("resultCount").textContent="Products load नहीं हुए";$("productGrid").innerHTML='<p class="muted">Firebase से प्रोडक्ट नहीं मिल पाए। Firestore Rules और इंटरनेट कनेक्शन जाँचें।</p>';console.error(e)}
+}
+function authNotice(t){$("authNotice").textContent=t;$("authNotice").classList.add("show")}
+function showAuth(m="login"){$("authModal").classList.add("show");mode=m;$("authNotice").classList.remove("show");$("authTitle").textContent=m==="signup"?"Create Customer Account":m==="reset"?"Reset Password":"Customer Login";$("authSub").textContent=m==="signup"?"नाम, मोबाइल और पासवर्ड से ग्राहक खाता बनाएँ। कोई Registration OTP ईमेल नहीं भेजा जाएगा।":m==="reset"?"ईमेल पर पासवर्ड रीसेट लिंक भेजा जाएगा।":"अपने Firebase खाते से लॉगिन करें।";["nameField","phoneField","confirmField"].forEach(x=>$(x).classList.toggle("hidden",m!=="signup"));$("authSubmit").textContent=m==="signup"?"Create Account":m==="reset"?"Send Reset Link":"Login";$("authSwitch").classList.toggle("hidden",m==="reset");$("forgotLine").classList.toggle("hidden",m!=="login")}
+function closeAuth(){$("authModal").classList.remove("show")}
+async function workerPost(path,body,token){const r=await fetch(WORKER_BASE+path,{method:"POST",headers:{"Content-Type":"application/json",...(token?{Authorization:"Bearer "+token}:{})},body:JSON.stringify(body)});const data=await r.json().catch(()=>({}));if(!r.ok||data.success===false)throw new Error(data.error||data.message||`Server error ${r.status}`);return data}
+$("accountBtn").onclick=$("heroAccount").onclick=$("footerAccount").onclick=()=>showAuth("login");$("closeAuth").onclick=closeAuth;
+$("showSignup").onclick=e=>{e.preventDefault();showAuth("signup")};$("forgotBtn").onclick=e=>{e.preventDefault();showAuth("reset")};
+$("authForm").onsubmit=async e=>{e.preventDefault();const email=$("email").value.trim().toLowerCase(),password=$("password").value,fullName=$("fullName").value.trim(),mobile=$("mobile").value.trim();const btn=$("authSubmit");btn.disabled=true;
+ try{
+  if(mode==="signup"){
+   if(fullName.length<2||!/^\d{10}$/.test(mobile))throw new Error("पूरा नाम और 10 अंकों का मोबाइल नंबर डालें।");
+   if(password!==$("confirmPassword").value||password.length<8)throw new Error("पासवर्ड कम से कम 8 अक्षर का हो और दोनों पासवर्ड समान हों।");
+   const credential=await auth.createUserWithEmailAndPassword(email,password);
+   try{const token=await credential.user.getIdToken();await workerPost("/api/registerCustomerProfile",{name:fullName,phone:mobile,email},token)}catch(profileError){await auth.signOut();throw new Error("खाता बन गया, लेकिन प्रोफाइल पूरा नहीं हुआ: "+profileError.message+" कृपया सहायता से संपर्क करें।")}
+   authNotice("आपका ग्राहक खाता बन गया है।");setTimeout(closeAuth,1200);
+  } else if(mode==="reset") {await auth.sendPasswordResetEmail(email);authNotice("पासवर्ड रीसेट लिंक ईमेल पर भेज दिया गया है।")}
+  else {await auth.signInWithEmailAndPassword(email,password);authNotice("Login सफल रहा।");setTimeout(closeAuth,700)}
+ }catch(err){authNotice(err.message||"कुछ गलत हुआ। फिर प्रयास करें।")}finally{btn.disabled=false}
+};
+async function socialLogin(providerName){
+ const btn=providerName==="google"?$("googleLogin"):$("appleLogin");btn.disabled=true;
+ try{
+  const provider=providerName==="google"?new firebase.auth.GoogleAuthProvider():new firebase.auth.OAuthProvider("apple.com");
+  if(providerName==="apple"){provider.addScope("email");provider.addScope("name");}
+  const result=await auth.signInWithPopup(provider);const user=result.user;
+  const ref=db.collection("users").doc(user.uid);let snap=await ref.get();
+  if(!snap.exists){
+   const fullName=window.prompt("अपना पूरा नाम डालें:")||"";const mobile=window.prompt("10 अंकों का मोबाइल नंबर डालें:")||"";
+   if(fullName.trim().length<2||!/^\d{10}$/.test(mobile.trim())){await auth.signOut();throw new Error("प्रोफाइल बनाने के लिए सही नाम और 10 अंकों का मोबाइल जरूरी है।");}
+   const token=await user.getIdToken();await workerPost("/api/registerCustomerProfile",{name:fullName.trim(),phone:mobile.trim(),email:user.email},token);
+   snap=await ref.get();
+  }
+  if(!snap.exists)throw new Error("ग्राहक प्रोफाइल नहीं मिली।");
+  authNotice("Login सफल रहा।");setTimeout(closeAuth,700);
+ }catch(e){authNotice(e.message||"Social login पूरा नहीं हुआ।");}
+ finally{btn.disabled=false;}
+}
+$("googleLogin").onclick=()=>socialLogin("google");$("appleLogin").onclick=()=>socialLogin("apple");
+auth.onAuthStateChanged(user=>{const b=$("accountBtn");if(b)b.innerHTML=user?"👤 <span>My Account</span>":"👤 <span>Account</span>"});
+function renderCart(){let box=$("cartItems");if(!cart.length){box.innerHTML='<div class="empty">🛒<br>Your cart is empty.</div>';$("cartFooter").innerHTML="";return}box.innerHTML=cart.map(x=>{let p=products.find(p=>p.id===x.id);if(!p)return "";return `<div class="cart-row"><div class="pic">${productEmoji(p)}</div><div class="grow"><b>${p.name}</b><div>${money(p.price)}</div><div class="qty"><button data-dec="${p.id}">−</button>${x.qty}<button data-inc="${p.id}">+</button><button data-remove="${p.id}" style="margin-left:auto">Remove</button></div></div></div>`}).join("");let total=cart.reduce((s,x)=>s+(Number(products.find(p=>p.id===x.id)?.price)||0)*x.qty,0);$("cartFooter").innerHTML=`<h3>Total: ${money(total)}</h3><button class="btn full" id="checkoutBtn">Proceed to Checkout</button><p class="muted" style="font-size:12px">ऑर्डर और भुगतान सुरक्षित Worker checkout से जोड़ने का काम अगला चरण है। अभी यह बटन लाइव ऑर्डर नहीं बनाता।</p>`;$("checkoutBtn").onclick=()=>{showAuth("login");authNotice("ऑर्डर देने की सुविधा लाइव करने से पहले सुरक्षित checkout API जोड़ना बाकी है।")}}
+function renderWishlist(){let box=$("wishlistItems");box.innerHTML=wishlist.length?wishlist.map(id=>{let p=products.find(x=>x.id===id);if(!p)return "";return `<div class="cart-row"><div class="pic">${productEmoji(p)}</div><div class="grow"><b>${p.name}</b><div>${money(p.price)}</div><button class="softbtn" data-add="${p.id}">Add to Cart</button> <button class="softbtn" data-unwish="${p.id}">Remove</button></div></div>`}).join(""):'<div class="empty">♡<br>Your wishlist is empty.</div>'}
+$("productGrid").addEventListener("click",e=>{let add=e.target.closest("[data-add]"),buy=e.target.closest("[data-buy]"),wish=e.target.closest("[data-wish]");if(add||buy){let id=(add||buy).dataset.add||buy.dataset.buy,item=cart.find(x=>x.id===id);item?item.qty++:cart.push({id,qty:1});save();if(buy){$("cartDrawer").classList.add("show");renderCart()}}if(wish){let id=wish.dataset.wish;wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id):wishlist.push(id);save();renderProducts($("searchInput").value)}});
+document.addEventListener("click",e=>{let d=e.target.closest("[data-dec]"),i=e.target.closest("[data-inc]"),r=e.target.closest("[data-remove]"),u=e.target.closest("[data-unwish]");if(d){let x=cart.find(x=>x.id===d.dataset.dec);x.qty=Math.max(1,x.qty-1);renderCart();save()}if(i){cart.find(x=>x.id===i.dataset.inc).qty++;renderCart();save()}if(r){cart=cart.filter(x=>x.id!==r.dataset.remove);renderCart();save()}if(u){wishlist=wishlist.filter(x=>x!==u.dataset.unwish);save();renderWishlist()}});
+$("cartBtn").onclick=()=>{$("cartDrawer").classList.add("show");renderCart()};$("closeCart").onclick=()=>$ ("cartDrawer").classList.remove("show");$("wishlistBtn").onclick=()=>{$("wishlistDrawer").classList.add("show");renderWishlist()};$("closeWishlist").onclick=()=>$ ("wishlistDrawer").classList.remove("show");
+$("searchForm").onsubmit=e=>{e.preventDefault();activeCategory="All";renderProducts($("searchInput").value);$("products").scrollIntoView({behavior:"smooth"})};$("categories").onclick=e=>{let b=e.target.closest("[data-cat]");if(!b)return;activeCategory=b.dataset.cat;renderProducts($("searchInput").value);$("products").scrollIntoView({behavior:"smooth"})};$("footerOrders").onclick=e=>{e.preventDefault();showAuth("login");authNotice("ऑर्डर हिस्ट्री स्क्रीन अगली इंटीग्रेशन में जोड़ी जाएगी।")};
+save();loadProducts();
+</script>
+</body></html>
